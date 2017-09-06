@@ -31,9 +31,20 @@
       {{ ::$ctrl.execution.trigger.repository }}:{{ ::$ctrl.execution.trigger.tag}}
     </li>
     <span ng-switch="::$ctrl.execution.trigger.type">
-      <li ng-switch-when="jenkins">
-        {{ ::$ctrl.execution.trigger.job}}
-      </li>
+      <span ng-switch-when="jenkins|travis" ng-switch-when-separator="|">
+        <li>
+          {{ ::$ctrl.execution.trigger.job}}
+        </li>
+        <li>
+          {{ ::$ctrl.execution.trigger.buildInfo.scm[0].committer }}
+        </li>
+        <li>
+          <a ng-if="::$ctrl.execution.trigger.buildInfo.scm[0].compareUrl" href="{{ ::$ctrl.execution.trigger.buildInfo.scm[0].compareUrl }}" target="_blank">
+            {{ ::$ctrl.execution.trigger.buildInfo.scm[0].sha1 | limitTo:7:0}}
+          </a>
+          <span ng-if="::$ctrl.execution.trigger.buildInfo.scm[0].compareUrl == null">{{ ::$ctrl.execution.trigger.buildInfo.scm[0].sha1 | limitTo:7:0}}</span>
+        </li>
+      </span>
       <li ng-switch-when="manual">
         {{ ::$ctrl.execution | executionUser }}
       </li>
